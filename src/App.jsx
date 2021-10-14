@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserList from "./components/UserList";
 import CreateUser from "./components/CreateUser";
+import Toggle from "./components/Toggle";
 
 function App() {
-  console.log("App render");
+  const [visible, setVisible] = useState(true);
   const [inputs, setInputs] = useState({
     username: "",
     email: ""
@@ -56,15 +57,20 @@ function App() {
     }));
     setUsers(toggleUser);
   };
+  const onVisible = () => {
+    setVisible(!visible);
+  };
   return (
     <div id="app">
-      <CreateUser
+      <Toggle visible={visible} />
+      <button onClick={onVisible}>toggle</button>
+      {/* <CreateUser
         username={username}
         email={email}
         onChange={onChange}
         onClick={onClick}
       />
-      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle} /> */}
     </div>
   );
 }
