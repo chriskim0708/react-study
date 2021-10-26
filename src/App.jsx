@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import UserList from "./components/UserList";
 import CreateUser from "./components/CreateUser";
-import Toggle from "./components/Toggle";
+// import Toggle from "./components/Toggle";
+
+function countActiveUsers(users) {
+  return users.filter((user) => user.active).length;
+}
 
 function App() {
   const [visible, setVisible] = useState(true);
+  const [view, setView] = useState(true);
   const [inputs, setInputs] = useState({
     username: "",
     email: ""
   });
+  const [number, setNumber] = useState(0);
 
   const { username, email } = inputs;
   const [users, setUsers] = useState([
@@ -31,46 +37,52 @@ function App() {
       active: false
     }
   ]);
-  const onChange = (e) => {
+  const onChange = useCallback((e) => {
     const { name, value } = e.target;
-    setInputs({
-      ...inputs,
+    setInputs((prevInputs) => ({
+      ...prevInputs,
       [name]: value
-    });
-  };
-  const onClick = () => {
-    const user = {
-      id: users.length + 1,
-      username,
-      email,
-      active: false
-    };
-    setUsers(users.concat(user));
-  };
-  const onRemove = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
-  };
-  const onToggle = (id) => {
-    const toggleUser = users.map((user) => ({
-      ...user,
-      active: user.id === id ? !user.active : false
     }));
-    setUsers(toggleUser);
-  };
+  }, []); // useCallback(() => {})
+  const onClick = useCallback(() => {
+    setUsers((prevUsers) => {
+      return prevUsers.concat({
+        id: prevUsers.length + 1,
+        username,
+        email,
+        active: false
+      });
+    });
+  }, [username, email]);
+  const onRemove = useCallback((id) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+  }, []);
+  const onToggle = useCallback((id) => {
+    setUsers((prevUsers) => {
+      return prevUsers.map((user) => {
+        return user.id === id ? { ...user, active: !user.active } : user;
+      });
+    });
+  }, []);
   const onVisible = () => {
     setVisible(!visible);
   };
+  const onView = () => {
+    setView(!view);
+  };
+  const count = useMemo(() => countActiveUsers(users), [users]); // 3
   return (
     <div id="app">
-      <Toggle visible={visible} />
-      <button onClick={onVisible}>toggle</button>
-      {/* <CreateUser
+      {/* <Toggle visible={visible} view={view} />
+      <button onClick={onVisible}>visible</button>
+      <button onClick={onView}>view</button> */}
+      <CreateUser
         username={username}
         email={email}
         onChange={onChange}
         onClick={onClick}
       />
-      <UserList users={users} onRemove={onRemove} onToggle={onToggle} /> */}
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
     </div>
   );
 }

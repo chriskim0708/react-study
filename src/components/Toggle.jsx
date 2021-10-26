@@ -1,14 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-function Toggle({ visible }) {
+function Toggle({ visible, view }) {
+  const dom = useRef();
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState("a");
   useEffect(() => {
     console.log("컴포넌트 마운트");
-    console.log(visible);
-    return () => {
-      console.log("컴포넌트 언마운트");
-    };
-  }, [visible]);
-  return <div>toggle</div>;
+    console.log(count);
+    console.log(text);
+  }, []);
+  const onClick = () => {
+    console.log(dom);
+    setCount(count + 1);
+    setText("b");
+  };
+  return (
+    <div ref={dom} onClick={onClick}>
+      toggle {count} {text}
+    </div>
+  );
 }
 
 export default Toggle;

@@ -1,16 +1,6 @@
 import React, { useEffect } from "react";
 
-function User({ user, onRemove, onToggle }) {
-  console.log("user component render");
-
-  useEffect(() => {
-    // 마운트
-    console.log("컴포넌트 마운트");
-    return () => {
-      // 언마운트
-      console.log("컴포넌트 언마운트");
-    };
-  }, [user]); // deps
+const User = React.memo(function User({ user, onRemove, onToggle }) {
   const active = user.active ? "active" : "";
   return (
     <li className={active}>
@@ -21,7 +11,7 @@ function User({ user, onRemove, onToggle }) {
       <button onClick={() => onRemove(user.id)}>삭제</button>
     </li>
   );
-}
+});
 
 function UserList({ users, onRemove, onToggle }) {
   return (
@@ -40,4 +30,4 @@ function UserList({ users, onRemove, onToggle }) {
   );
 }
 
-export default UserList;
+export default React.memo(UserList);
