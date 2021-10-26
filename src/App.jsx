@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import UserList from "./components/UserList";
 import CreateUser from "./components/CreateUser";
-// import Toggle from "./components/Toggle";
 
 function countActiveUsers(users) {
   return users.filter((user) => user.active).length;
 }
 
 function App() {
-  const [visible, setVisible] = useState(true);
-  const [view, setView] = useState(true);
   const [inputs, setInputs] = useState({
     username: "",
     email: ""
   });
-  const [number, setNumber] = useState(0);
 
   const { username, email } = inputs;
   const [users, setUsers] = useState([
@@ -64,18 +60,9 @@ function App() {
       });
     });
   }, []);
-  const onVisible = () => {
-    setVisible(!visible);
-  };
-  const onView = () => {
-    setView(!view);
-  };
   const count = useMemo(() => countActiveUsers(users), [users]); // 3
   return (
     <div id="app">
-      {/* <Toggle visible={visible} view={view} />
-      <button onClick={onVisible}>visible</button>
-      <button onClick={onView}>view</button> */}
       <CreateUser
         username={username}
         email={email}
