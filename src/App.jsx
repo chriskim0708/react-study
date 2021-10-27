@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import UserList from "./components/UserList";
 import CreateUser from "./components/CreateUser";
+import Counter from "./components/Counter";
 
 function countActiveUsers(users) {
   return users.filter((user) => user.active).length;
@@ -63,13 +64,14 @@ function App() {
   const count = useMemo(() => countActiveUsers(users), [users]); // 3
   return (
     <div id="app">
-      <CreateUser
+      {/* <CreateUser
         username={username}
         email={email}
         onChange={onChange}
         onClick={onClick}
       />
-      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle} /> */}
+      <Counter />
     </div>
   );
 }
